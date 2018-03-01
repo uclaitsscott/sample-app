@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0 AS build
-#WORKDIR /src
+WORKDIR /src
 #COPY *.sln ./
 COPY *.csproj ./
 #COPY sample-app/sample-app.csproj sample-app/
