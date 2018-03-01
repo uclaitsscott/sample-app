@@ -1,20 +1,17 @@
 FROM microsoft/aspnetcore:2.0 AS base
 WORKDIR /app
-
-FROM base AS restore
-COPY *.csproj ./
-RUN donet restore
-
-FROM restore AS build
-RUN dotnet build -c Release -o /app
-
-FROM build AS publish
-COPY . ./
-RUN dotnet publish -c Release -o /app
-
 EXPOSE 80
 
-FROM base AS final
+# copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
+
+# copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# build runtime image
+FROM microsoft/aspnetcore:2.0 
 WORKDIR /app
-COPY --from=publish /app ./
+COPY --from=base /app/out ./
 ENTRYPOINT ["dotnet", "sample-app.dll"]
