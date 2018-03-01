@@ -5,7 +5,7 @@ EXPOSE 80
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
 #COPY *.sln ./
-COPY **/sample-app/sample-app.csproj sample-app/
+COPY /sample-app/sample-app.csproj /src/sample-app/
 RUN dotnet restore
 COPY . .
 WORKDIR /src/sample-app
